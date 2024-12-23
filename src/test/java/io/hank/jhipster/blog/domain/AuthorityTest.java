@@ -1,6 +1,7 @@
 package io.hank.jhipster.blog.domain;
 
-import static io.hank.jhipster.blog.domain.AuthorityTestSamples.*;
+import static io.hank.jhipster.blog.domain.AuthorityTestSamples.getAuthoritySample1;
+import static io.hank.jhipster.blog.domain.AuthorityTestSamples.getAuthoritySample2;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.hank.jhipster.blog.web.rest.TestUtil;

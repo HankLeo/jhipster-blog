@@ -1,0 +1,26 @@
+{
+  "blogApp": {
+    "blog": {
+      "home": {
+        "title": "Blogs",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "创建新 Blog",
+        "createOrEditLabel": "创建或编辑 Blog",
+        "notFound": "No Blogs found"
+      },
+      "created": "Blog {{ param }} 创建成功",
+      "updated": "Blog {{ param }} 更新成功",
+      "deleted": "Blog {{ param }} 删除成功",
+      "delete": {
+        "question": "你确定要删除 Blog {{ id }} 吗？"
+      },
+      "detail": {
+        "title": "Blog"
+      },
+      "id": "ID",
+      "name": "Name",
+      "handle": "Handle",
+      "user": "User"
+    }
+  }
+}

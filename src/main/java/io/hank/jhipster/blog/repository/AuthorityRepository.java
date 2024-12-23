@@ -1,7 +1,7 @@
 package io.hank.jhipster.blog.repository;
 
 import io.hank.jhipster.blog.domain.Authority;
-import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**

@@ -8,7 +8,9 @@
       "entities": {
         "main": "Entities",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-        "adminAuthority": "Authority"
+        "blog": "Blog",
+        "post": "Post",
+        "tag": "Tag"
       },
       "account": {
         "main": "Account",

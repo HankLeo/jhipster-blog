@@ -3,7 +3,7 @@ package io.hank.jhipster.blog.config;
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
-import io.hank.jhipster.blog.security.*;
+import io.hank.jhipster.blog.security.AuthoritiesConstants;
 import io.hank.jhipster.blog.web.filter.SpaWebFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,7 @@
 package io.hank.jhipster.blog.config;
 
-import static io.hank.jhipster.blog.config.StaticResourcesWebConfiguration.*;
+import static io.hank.jhipster.blog.config.StaticResourcesWebConfiguration.RESOURCE_LOCATIONS;
+import static io.hank.jhipster.blog.config.StaticResourcesWebConfiguration.RESOURCE_PATHS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
