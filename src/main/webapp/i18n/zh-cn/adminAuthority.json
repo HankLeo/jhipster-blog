@@ -1,0 +1,23 @@
+{
+  "blogApp": {
+    "adminAuthority": {
+      "home": {
+        "title": "Authorities",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "创建新 Authority",
+        "createOrEditLabel": "创建或编辑 Authority",
+        "notFound": "No Authorities found"
+      },
+      "created": "Authority {{ param }} 创建成功",
+      "updated": "Authority {{ param }} 更新成功",
+      "deleted": "Authority {{ param }} 删除成功",
+      "delete": {
+        "question": "你确定要删除 Authority {{ id }} 吗？"
+      },
+      "detail": {
+        "title": "Authority"
+      },
+      "name": "Name"
+    }
+  }
+}
