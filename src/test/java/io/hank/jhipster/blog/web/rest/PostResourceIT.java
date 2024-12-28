@@ -10,14 +10,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hank.jhipster.blog.IntegrationTest;
+import io.hank.jhipster.blog.domain.Blog;
 import io.hank.jhipster.blog.domain.Post;
+import io.hank.jhipster.blog.domain.User;
+import io.hank.jhipster.blog.repository.BlogRepository;
 import io.hank.jhipster.blog.repository.PostRepository;
+import io.hank.jhipster.blog.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,14 +60,20 @@ class PostResourceIT {
     private static final String ENTITY_API_URL = "/api/posts";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-    private static Random random = new Random();
-    private static AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2L * Integer.MAX_VALUE));
 
     @Autowired
     private ObjectMapper om;
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private BlogRepository blogRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Mock
     private PostRepository postRepositoryMock;
@@ -78,27 +90,41 @@ class PostResourceIT {
 
     /**
      * Create an entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Post createEntity() {
-        return new Post().title(DEFAULT_TITLE).content(DEFAULT_CONTENT).date(DEFAULT_DATE);
+    public Post createEntity(EntityManager em) {
+        Post post = new Post().title(DEFAULT_TITLE).content(DEFAULT_CONTENT).date(DEFAULT_DATE);
+        Optional<User> user = userRepository.findOneByLogin("user");
+        Blog blog = new Blog().name("test").handle("test");
+        if (user.isPresent()) {
+            blog.setUser(user.orElse(null));
+        } else {
+            User newuser = new User();
+            newuser.setLogin("user"); // username used by @WithMockUser
+            newuser.setPassword(RandomStringUtils.randomAlphanumeric(60));
+            userRepository.saveAndFlush(newuser);
+            blog.setUser(newuser);
+        }
+        blogRepository.saveAndFlush(blog);
+        post.setBlog(blog);
+        return post;
     }
 
     /**
      * Create an updated entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Post createUpdatedEntity() {
+    public static Post createUpdatedEntity(EntityManager em) {
         return new Post().title(UPDATED_TITLE).content(UPDATED_CONTENT).date(UPDATED_DATE);
     }
 
     @BeforeEach
     public void initTest() {
-        post = createEntity();
+        post = createEntity(em);
     }
 
     @AfterEach
@@ -193,7 +219,7 @@ class PostResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(post.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
-            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())))
+            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())));
     }
 
@@ -227,7 +253,7 @@ class PostResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(post.getId().intValue()))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
-            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT.toString()))
+            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT))
             .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()));
     }
 
@@ -337,7 +363,6 @@ class PostResourceIT {
             .andExpect(status().isOk());
 
         // Validate the Post in the database
-
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
         assertPostUpdatableFieldsEquals(createUpdateProxyForBean(partialUpdatedPost, post), getPersistedPost(post));
     }
@@ -365,7 +390,6 @@ class PostResourceIT {
             .andExpect(status().isOk());
 
         // Validate the Post in the database
-
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
         assertPostUpdatableFieldsEquals(partialUpdatedPost, getPersistedPost(partialUpdatedPost));
     }

@@ -11,12 +11,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hank.jhipster.blog.IntegrationTest;
 import io.hank.jhipster.blog.domain.Blog;
+import io.hank.jhipster.blog.domain.User;
 import io.hank.jhipster.blog.repository.BlogRepository;
 import io.hank.jhipster.blog.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,8 +53,8 @@ class BlogResourceIT {
     private static final String ENTITY_API_URL = "/api/blogs";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-    private static Random random = new Random();
-    private static AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2L * Integer.MAX_VALUE));
 
     @Autowired
     private ObjectMapper om;
@@ -77,27 +80,38 @@ class BlogResourceIT {
 
     /**
      * Create an entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Blog createEntity() {
-        return new Blog().name(DEFAULT_NAME).handle(DEFAULT_HANDLE);
+    public Blog createEntity(EntityManager em) {
+        Blog blog = new Blog().name(DEFAULT_NAME).handle(DEFAULT_HANDLE);
+        Optional<User> user = userRepository.findOneByLogin("user");
+        if (user.isPresent()) {
+            blog.setUser(user.orElse(null));
+        } else {
+            User newuser = new User();
+            newuser.setLogin("user"); // username used by @WithMockUser
+            newuser.setPassword(RandomStringUtils.randomAlphanumeric(60));
+            userRepository.saveAndFlush(newuser);
+            blog.setUser(newuser);
+        }
+        return blog;
     }
 
     /**
      * Create an updated entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Blog createUpdatedEntity() {
+    public static Blog createUpdatedEntity(EntityManager em) {
         return new Blog().name(UPDATED_NAME).handle(UPDATED_HANDLE);
     }
 
     @BeforeEach
     public void initTest() {
-        blog = createEntity();
+        blog = createEntity(em);
     }
 
     @AfterEach
@@ -323,7 +337,7 @@ class BlogResourceIT {
         Blog partialUpdatedBlog = new Blog();
         partialUpdatedBlog.setId(blog.getId());
 
-        partialUpdatedBlog.handle(UPDATED_HANDLE);
+        partialUpdatedBlog.name(UPDATED_NAME).handle(UPDATED_HANDLE);
 
         restBlogMockMvc
             .perform(
@@ -334,7 +348,6 @@ class BlogResourceIT {
             .andExpect(status().isOk());
 
         // Validate the Blog in the database
-
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
         assertBlogUpdatableFieldsEquals(createUpdateProxyForBean(partialUpdatedBlog, blog), getPersistedBlog(blog));
     }
@@ -362,7 +375,6 @@ class BlogResourceIT {
             .andExpect(status().isOk());
 
         // Validate the Blog in the database
-
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
         assertBlogUpdatableFieldsEquals(partialUpdatedBlog, getPersistedBlog(partialUpdatedBlog));
     }
