@@ -23,6 +23,7 @@
       },
       "admin": {
         "main": "Administration",
+        "adminAuthority": "Authorities",
         "userManagement": "User management",
         "tracker": "User tracker",
         "metrics": "Metrics",

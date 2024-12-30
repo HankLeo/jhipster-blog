@@ -23,6 +23,7 @@
       },
       "admin": {
         "main": "管理",
+        "adminAuthority": "授权管理",
         "userManagement": "使用者管理",
         "tracker": "使用者追蹤",
         "metrics": "資源監控",
