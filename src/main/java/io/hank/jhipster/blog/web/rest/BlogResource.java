@@ -62,7 +62,7 @@ public class BlogResource {
     /**
      * {@code PUT  /blogs/:id} : Updates an existing blog.
      *
-     * @param id the id of the blog to save.
+     * @param id   the id of the blog to save.
      * @param blog the blog to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated blog,
      * or with status {@code 400 (Bad Request)} if the blog is not valid,
@@ -93,7 +93,7 @@ public class BlogResource {
     /**
      * {@code PATCH  /blogs/:id} : Partial updates given fields of an existing blog, field will ignore if it is null
      *
-     * @param id the id of the blog to save.
+     * @param id   the id of the blog to save.
      * @param blog the blog to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated blog,
      * or with status {@code 400 (Bad Request)} if the blog is not valid,
