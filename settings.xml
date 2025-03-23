@@ -1,59 +1,9 @@
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
-                          https://maven.apache.org/xsd/settings-1.0.0.xsd">
+<settings>
   <mirrors>
     <mirror>
-      <id>artifactory</id>
-      <mirrorOf>*</mirrorOf>
-      <url>https://shcartifactory.swinfra.net:443/artifactory/itom-mvn-sma-group</url>
-      <name>Artifactory</name>
+      <id>repo1.maven.org</id>
+      <mirrorOf>central</mirrorOf>
+      <url>https://repo1.maven.org/maven2/</url>
     </mirror>
   </mirrors>
-
-  <proxies>
-    <proxy>
-      <id>https-proxy</id>
-      <active>true</active>
-      <protocol>https</protocol>
-      <host>web-proxy.us.softwaregrp.net</host>
-      <port>8080</port>
-      <nonProxyHosts>*.opentext.net|*.microfocus.com|*.swinfra.net</nonProxyHosts>
-    </proxy>
-    <proxy>
-      <id>http-proxy</id>
-      <active>true</active>
-      <protocol>http</protocol>
-      <host>web-proxy.us.softwaregrp.net</host>
-      <port>8080</port>
-      <nonProxyHosts>*.opentext.net|*.microfocus.com|*.swinfra.net</nonProxyHosts>
-    </proxy>
-  </proxies>
-
-  <profiles>
-    <profile>
-      <id>shc</id>
-      <properties>
-        <artifactory>shcartifactory.swinfra.net</artifactory>
-      </properties>
-    </profile>
-    <profile>
-      <id>itom-mvn-sma-group</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <repositories>
-        <repository>
-          <id>itom-mvn-sma-group</id>
-          <url>https://${artifactory}:443/artifactory/itom-mvn-sma-group</url>
-        </repository>
-      </repositories>
-    </profile>
-  </profiles>
-
-  <activeProfiles>
-    <activeProfile>shc</activeProfile>
-  </activeProfiles>
-
 </settings>
-
